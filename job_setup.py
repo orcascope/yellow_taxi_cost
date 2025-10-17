@@ -1,8 +1,12 @@
-# %pip install --upgrade databricks-sdk
-
+%pip install databricks-sdk==0.68.0
+%restart_python
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.jobs import JobSettings as Job
+from databricks.sdk.service.jobs import JobCluster
 import os
+from util.cluster_spec import d4sv3_single_tot_4c_16g
+
+cluster_spec = d4sv3_single_tot_4c_16g
 
 ddl_setup = Job.from_dict(
     {
@@ -18,6 +22,15 @@ ddl_setup = Job.from_dict(
         ],
         "queue": {
             "enabled": True,
+        },
+        "job_clusters" : [JobCluster.from_dict(
+            {"job_cluster_key": "d4sv3", 
+             "new_cluster":cluster_spec.as_dict()
+            }).as_dict() 
+        ],
+        "tags": {
+            "resource_type": "d4sv3_single",
+            "cluster_name": "d4sv3_single_4c_16g"
         },
         "parameters": [
             {"name": "CATALOG", "default": "1"},
@@ -55,6 +68,15 @@ daily_load = Job.from_dict(
         "queue": {
             "enabled": True,
         },
+        "job_clusters" : [JobCluster.from_dict(
+            {"job_cluster_key": "d4sv3", 
+             "new_cluster":cluster_spec.as_dict()
+            }).as_dict() 
+        ],
+        "tags": {
+            "resource_type": "d4sv3_single",
+            "cluster_name": "d4sv3_single_4c_16g"
+        },
         "parameters": [
             {"name": "CATALOG", "default": "1"},
             {"name": "SCHEMA", "default": "1"},
@@ -67,11 +89,7 @@ daily_load = Job.from_dict(
         ]
     }
 )
-
-
 w = WorkspaceClient()
 ddl_setup_id = w.jobs.create(**ddl_setup.as_shallow_dict())
 daily_load_id = w.jobs.create(**daily_load.as_shallow_dict())
-
-print(f"DDL setup job id: {ddl_setup_id}")
 print(f"Daily load job id: {daily_load_id}")
