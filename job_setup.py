@@ -4,9 +4,11 @@ from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.jobs import JobSettings as Job
 from databricks.sdk.service.jobs import JobCluster
 import os
-from util.cluster_spec import d4sv3_single_tot_4c_16g
+from util.cluster_spec import *
 
-cluster_spec = d4sv3_single_tot_4c_16g
+cluster_spec = d4sv3_1w_tot_8c_32g
+cluster_name = cluster_spec.as_dict()['custom_tags']['resource_type']                        
+job_cluster_key= cluster_spec.as_dict()['custom_tags']['job_cluster_key'] 
 
 ddl_setup = Job.from_dict(
     {
@@ -24,13 +26,13 @@ ddl_setup = Job.from_dict(
             "enabled": True,
         },
         "job_clusters" : [JobCluster.from_dict(
-            {"job_cluster_key": "d4sv3", 
+            {"job_cluster_key": job_cluster_key, 
              "new_cluster":cluster_spec.as_dict()
             }).as_dict() 
         ],
         "tags": {
-            "resource_type": "d4sv3_single",
-            "cluster_name": "d4sv3_single_4c_16g"
+            "resource_type": cluster_name,
+            "cluster_name": cluster_name
         },
         "parameters": [
             {"name": "CATALOG", "default": "1"},
@@ -69,13 +71,13 @@ daily_load = Job.from_dict(
             "enabled": True,
         },
         "job_clusters" : [JobCluster.from_dict(
-            {"job_cluster_key": "d4sv3", 
+            {"job_cluster_key": job_cluster_key, 
              "new_cluster":cluster_spec.as_dict()
             }).as_dict() 
         ],
         "tags": {
-            "resource_type": "d4sv3_single",
-            "cluster_name": "d4sv3_single_4c_16g"
+            "resource_type": cluster_name,
+            "cluster_name": cluster_name
         },
         "parameters": [
             {"name": "CATALOG", "default": "1"},
@@ -92,4 +94,10 @@ daily_load = Job.from_dict(
 w = WorkspaceClient()
 ddl_setup_id = w.jobs.create(**ddl_setup.as_shallow_dict())
 daily_load_id = w.jobs.create(**daily_load.as_shallow_dict())
+
+print(f"DDL setup job id: {ddl_setup_id}")
 print(f"Daily load job id: {daily_load_id}")
+
+
+
+#end of page

@@ -1,9 +1,11 @@
 from databricks.sdk.service.compute import ClusterSpec
+import uuid
 
 d4sv3_single_tot_4c_16g = ClusterSpec.from_dict({
                             "data_security_mode": "DATA_SECURITY_MODE_AUTO",
                             "custom_tags": {
-                                "resource_type": "d4sv3_single_tot_4c_16g"
+                                "resource_type": "d4sv3_single_tot_4c_16g",
+                                "job_cluster_key": "d4sv3"+"_"+str(uuid.uuid1())[:8]
                             },
                             "kind": "CLASSIC_PREVIEW",
                             "azure_attributes": {
@@ -13,5 +15,22 @@ d4sv3_single_tot_4c_16g = ClusterSpec.from_dict({
                             "spark_version": "16.4.x-scala2.12",
                             "node_type_id": "Standard_D4s_v3",
                             "is_single_node": True,
+                            "num_workers": 1
+                        })
+
+d4sv3_1w_tot_8c_32g = ClusterSpec.from_dict({
+                            "data_security_mode": "DATA_SECURITY_MODE_AUTO",
+                            "custom_tags": {
+                                "resource_type": "d4sv3_1w_tot_8c_32g",
+                                "job_cluster_key": "d4sv3"+"_"+str(uuid.uuid1())[:8]
+                            },
+                            "kind": "CLASSIC_PREVIEW",
+                            "azure_attributes": {
+                                "availability": "SPOT_WITH_FALLBACK_AZURE"
+                            },
+                            "runtime_engine": "STANDARD",
+                            "spark_version": "16.4.x-scala2.12",
+                            "node_type_id": "Standard_D4s_v3",
+                            "is_single_node": False,
                             "num_workers": 1
                         })

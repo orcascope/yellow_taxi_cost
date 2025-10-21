@@ -6,22 +6,27 @@ from databricks.sdk.service import jobs
 
 w = WorkspaceClient()
 
-# DDL setup job id: CreateResponse(job_id=861563541071827)
-# Daily load job id: CreateResponse(job_id=737591956135053)
+# ddl_setup_response = w.jobs.run_now(job_id=119088678823965 , 
+#                     job_parameters = {
+#                         "CATALOG": "workspace",
+#                         "SCHEMA": "default",
+#                         "PROFILE": "batch_aggr",
+#                         "PROFILE_DTL": "d4sv3_1w_tot_8c_32g_5year"
+#                     })
 
-# ddl_setup_response = w.jobs.run_now(job_id=357646783472642 , 
-#                     job_parameters = {"CATALOG": "workspace",
-#                                         "SCHEMA": "default"}              
-#                     )
-
-daily_load_response = w.jobs.run_now(job_id=737591956135053 , 
+daily_load_response = w.jobs.run_now(job_id=1034890538031766 , 
                     job_parameters = {"CATALOG": "workspace",
                                         "SCHEMA": "default",
-                                        "YEAR_START": "2009",
-                                        "YEAR_END": "2013",
-                                        "MONTH_START": "2009-01-01",
-                                        "MONTH_END": "2013-12-31",
+                                        "YEAR_START": "2014",
+                                        "YEAR_END": "2014",
+                                        "MONTH_START": "2014-01-01",
+                                        "MONTH_END": "2014-12-31",
                                         "PROFILE": "batch_aggr",
-                                        "PROFILE_DTL": "serverless_5year"
+                                        "PROFILE_DTL": "d4sv3_1w_tot_8c_32g_2014"
                                         }              
                     )
+
+
+
+
+#- end of script                    

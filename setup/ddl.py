@@ -6,6 +6,11 @@ schema = dbutils.widgets.get("SCHEMA")
 
 # COMMAND ----------
 
+spark.sql(f"CREATE catalog IF NOT EXISTS {catalog} MANAGED LOCATION 'abfss://catdata@adlsdbrkstore.dfs.core.windows.net/nyc_location';");
+spark.sql(f"CREATE schema  IF NOT EXISTS {schema}");
+
+# COMMAND ----------
+
 spark.sql(f"Use catalog {catalog}");
 spark.sql(f"Use schema {schema}");
 
